@@ -15,24 +15,61 @@
 
     <!-- 메인 콘텐츠 -->
     <main>
-        <section class="intro">
-            <h2>서비스 소개</h2>
-            <p>
-                베트남에서 인기 있는 TOP 30 한류 아이돌을 중심으로<br>
-                인기도 통계와 커뮤니티 기능을 제공하는 웹 서비스입니다.
-            </p>
+
+        <!-- 검색 영역 -->
+        <section class="search">
+            <form method="get" action="/">
+                <input 
+                    type="text" 
+                    name="keyword" 
+                    placeholder="아이돌 이름 또는 그룹 검색"
+                    value="{{ keyword | default('') }}"
+                >
+                <button type="submit">검색</button>
+            </form>
         </section>
 
+        <!-- 아이돌 리스트 -->
         <section class="idol-list">
-    <h2>베트남 TOP 30 한류 아이돌</h2>
+            <h2>베트남 TOP 한류 아이돌</h2>
 
-    {% for idol in idols %}
-    <div class="idol-card">
-        <h3>{{ idol.name }}</h3>
-        <p>{{ idol.group }}</p>
-    </div>
-    {% endfor %}
-</section>
+            {% if idols %}
+                {% for idol in idols %}
+                <div class="idol-card">
+                    <h3>{{ idol.name }}</h3>
+                    <p>그룹: {{ idol.group_name }}</p>
+                    <p>
+                        인기도: 
+                        {% if idol.popularity_score %}
+                            {{ idol.popularity_score }}
+                        {% else %}
+                            데이터 없음
+                        {% endif %}
+                    </p>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p>검색 결과가 없습니다.</p>
+            {% endif %}
+        </section>
+
+        <!-- 방문객 통계 -->
+        <section class="stats">
+            <h2>2019년 베트남 방문객 월별 통계</h2>
+
+            <table>
+                <tr>
+                    <th>월</th>
+                    <th>방문객 수</th>
+                </tr>
+                {% for stat in monthly_stats %}
+                <tr>
+                    <td>{{ stat.month }}</td>
+                    <td>{{ stat.count }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </section>
 
     </main>
 
