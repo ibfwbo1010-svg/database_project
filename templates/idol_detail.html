@@ -13,12 +13,22 @@
 </header>
 
 <main>
+<section class="intro">
+    <h2>아이돌 정보</h2>
+    <p>소속사: {{ idol.agency }}</p>
+    <p>데뷔 연도: {{ idol.debut_year }}</p>
 
-    <section class="intro">
-        <h2>아이돌 정보</h2>
-        <p>소속사: {{ idol.agency }}</p>
-        <p>데뷔 연도: {{ idol.debut_year }}</p>
-    </section>
+    <h3>인기도 요약</h3>
+    <p>평균 인기도: {{ "%.1f"|format(stats.avg_score) }}</p>
+    <p>최고 인기도: {{ stats.max_score }}</p>
+
+    {% if peak %}
+    <p>
+        최고 인기 시점:
+        {{ peak.year }}년 {{ peak.month }}월
+    </p>
+    {% endif %}
+</section>
 
     <section class="stats">
         <h2>월별 인기도</h2>

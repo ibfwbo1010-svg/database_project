@@ -2,86 +2,76 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>베트남 한류 아이돌 트렌드</title>
+    <title>Vietnam K-POP Idol Trend</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
-    <!-- 헤더 -->
-    <header>
-        <h1>베트남 한류 아이돌 트렌드</h1>
-        <p>데이터 기반 한류 인기도 & 커뮤니티 서비스</p>
-    </header>
+<header>
+    <h1>Vietnam K-POP Idol Trend</h1>
+    <p>Data-driven Hallyu Popularity & Community Service</p>
+</header>
 
-    <!-- 메인 콘텐츠 -->
-    <main>
+<main>
 
-        <!-- 검색 영역 -->
-        <section class="search">
-            <form method="get" action="/">
-                <input 
-                    type="text" 
-                    name="keyword" 
-                    placeholder="아이돌 이름 또는 그룹 검색"
-                    value="{{ keyword | default('') }}"
+    <!-- 검색 -->
+    <section class="search">
+        <form method="get" action="/">
+            <input
+                type="text"
+                name="keyword"
+                placeholder="Search idol or group"
+                value="{{ keyword | default('') }}"
+            >
+            <button type="submit">Search</button>
+        </form>
+    </section>
+
+    <!-- 아이돌 이미지 카드 -->
+    <section class="idol-list">
+        <h2>Top K-POP Idols in Vietnam</h2>
+
+        <div class="idol-grid">
+            {% for idol in idols %}
+            <a href="/idol/{{ idol.id }}" class="idol-card">
+                <img
+                    src="{{ url_for('static', filename='images/' ~ idol.image) }}"
+                    alt="{{ idol.name }}"
                 >
-                <button type="submit">검색</button>
-            </form>
-        </section>
+                <h3>{{ idol.name }}</h3>
+                <p>{{ idol.group_name }}</p>
 
-        <!-- 아이돌 리스트 -->
-        <section class="idol-list">
-            <h2>베트남 TOP 한류 아이돌</h2>
+                {% if idol.popularity_score %}
+                <p class="score">Popularity: {{ idol.popularity_score }}</p>
+                {% endif %}
+            </a>
+            {% endfor %}
+        </div>
+    </section>
 
-            {% if idols %}
-                {% for idol in idols %}
-                <div class="idol-card">
-                    <h3><h3>
-    <a href="/idol/{{ idol.id }}">{{ idol.name }}</a>
-</h3>
+    <!-- 방문객 통계 -->
+    <section class="stats">
+        <h2>Vietnam Visitors to Korea (2019)</h2>
 
+        <table>
+            <tr>
+                <th>Month</th>
+                <th>Visitors</th>
+            </tr>
+            {% for stat in monthly_stats %}
+            <tr>
+                <td>{{ stat.month }}</td>
+                <td>{{ stat.count }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </section>
 
-                    </h3>
-                    <p>그룹: {{ idol.group_name }}</p>
-                    <p>
-                        인기도: 
-                        {% if idol.popularity_score %}
-                            {{ idol.popularity_score }}
-                        {% else %}
-                            데이터 없음
-                        {% endif %}
-                    </p>
-                </div>
-                {% endfor %}
-            {% else %}
-                <p>검색 결과가 없습니다.</p>
-            {% endif %}
-        </section>
+</main>
 
-        <!-- 방문객 통계 -->
-        <section class="stats">
-            <h2>2019년 베트남 방문객 월별 통계</h2>
-
-            <table>
-                <tr>
-                    <th>월</th>
-                    <th>방문객 수</th>
-                </tr>
-                {% for stat in monthly_stats %}
-                <tr>
-                    <td>{{ stat.month }}</td>
-                    <td>{{ stat.count }}</td>
-                </tr>
-                {% endfor %}
-            </table>
-        </section>
-
-    </main>
-
-    <!-- 푸터 -->
-    <footer>
-        <p>© 2025 베트남 한류 아이돌 트렌드 서비스</p>
-    </footer>
+<footer>
+    <p>© 2025 Vietnam K-POP Idol Trend Service</p>
+</footer>
 
 </body>
 </html>
