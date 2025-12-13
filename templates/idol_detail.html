@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ idol.name }} - 상세 정보</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<header>
+    <h1>{{ idol.name }}</h1>
+    <p>{{ idol.group_name }}</p>
+</header>
+
+<main>
+
+    <section class="intro">
+        <h2>아이돌 정보</h2>
+        <p>소속사: {{ idol.agency }}</p>
+        <p>데뷔 연도: {{ idol.debut_year }}</p>
+    </section>
+
+    <section class="stats">
+        <h2>월별 인기도</h2>
+
+        {% if popularity %}
+        <table>
+            <tr>
+                <th>연도</th>
+                <th>월</th>
+                <th>인기도 점수</th>
+            </tr>
+            {% for p in popularity %}
+            <tr>
+                <td>{{ p.year }}</td>
+                <td>{{ p.month }}</td>
+                <td>{{ p.popularity_score }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <p>인기도 데이터가 없습니다.</p>
+        {% endif %}
+    </section>
+
+    <a href="/">← 메인 페이지로 돌아가기</a>
+
+</main>
+
+</body>
+</html>

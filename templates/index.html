@@ -36,7 +36,12 @@
             {% if idols %}
                 {% for idol in idols %}
                 <div class="idol-card">
-                    <h3>{{ idol.name }}</h3>
+                    <h3><h3>
+    <a href="/idol/{{ idol.id }}">{{ idol.name }}</a>
+</h3>
+
+
+                    </h3>
                     <p>그룹: {{ idol.group_name }}</p>
                     <p>
                         인기도: 
