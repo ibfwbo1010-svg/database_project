@@ -15,10 +15,6 @@ def get_db():
 
 # =========================
 # 메인 페이지
-# - 전체 아이돌 목록 표시
-# - 월 선택 가능
-# - 베트남 방문객 수
-# - 월별 TOP 키워드
 # =========================
 @app.route("/")
 def home():
@@ -42,7 +38,7 @@ def home():
         visitor = None
 
     # -------------------------
-    # 2. 월별 TOP 키워드
+    # 2. 월별 베트남 커뮤니티 TOP 키워드
     # -------------------------
     top_keywords = []
     try:
@@ -59,7 +55,27 @@ def home():
         top_keywords = []
 
     # -------------------------
-    # 3. 전체 아이돌 목록 (메인 페이지용)
+    # 3. ⭐ 월별 인기도 TOP 5 아이돌 ⭐ (핵심)
+    # -------------------------
+    cur.execute("""
+        SELECT
+            i.id,
+            i.name,
+            i.group_name,
+            i.image,
+            p.popularity_score
+        FROM idol_popularity p
+        JOIN idol i
+          ON p.idol_id = i.id
+        WHERE p.year = 2019
+          AND p.month = ?
+        ORDER BY p.popularity_score DESC
+        LIMIT 5
+    """, (month,))
+    top5_idols = cur.fetchall()
+
+    # -------------------------
+    # 4. 전체 아이돌 목록
     # -------------------------
     cur.execute("""
         SELECT id, name, group_name, image
@@ -69,7 +85,7 @@ def home():
     idols = cur.fetchall()
 
     # -------------------------
-    # 4. 게시글 목록 (최대 10개)
+    # 5. 게시글 목록 (최대 10개)
     # -------------------------
     posts = []
     try:
@@ -90,6 +106,7 @@ def home():
         selected_month=month,
         visitor=visitor,
         top_keywords=top_keywords,
+        top5_idols=top5_idols,   # ⭐ 반드시 전달
         idols=idols,
         posts=posts
     )
@@ -97,13 +114,9 @@ def home():
 
 # =========================
 # 아이돌 개인 페이지
-# - 기본 정보
-# - 월별 인기도 테이블
-# - 커뮤니티 주요 키워드
 # =========================
 @app.route("/idol/<int:id>")
 def idol_detail(id):
-    print("DEBUG idol_id:", id)
     conn = get_db()
     cur = conn.cursor()
 
@@ -117,43 +130,32 @@ def idol_detail(id):
 
     # -------------------------
     # 월별 인기도 (2019)
-    # ⚠️ score 컬럼 기준
     # -------------------------
-    popularity = []
-    try:
-        cur.execute("""
-            SELECT
-                month,
-                popularity_score
-            FROM idol_popularity
-            WHERE idol_id = ?
-              AND year = 2019
-            ORDER BY month
-        """, (id,))
-        popularity = cur.fetchall()
-    except sqlite3.OperationalError:
-        popularity = []
+    cur.execute("""
+        SELECT month, popularity_score
+        FROM idol_popularity
+        WHERE idol_id = ?
+          AND year = 2019
+        ORDER BY month
+    """, (id,))
+    popularity = cur.fetchall()
 
     # -------------------------
     # 베트남 커뮤니티 주요 키워드
     # -------------------------
-    keywords = []
-    try:
-        cur.execute("""
-            SELECT keyword, SUM(keyword_count) AS total_count
-            FROM keyword_trend
-            WHERE year = 2019
-              AND (
-                  LOWER(keyword) LIKE '%' || LOWER(?) || '%'
-                  OR LOWER(keyword) LIKE '%' || LOWER(?) || '%'
-              )
-            GROUP BY keyword
-            ORDER BY total_count DESC
-            LIMIT 5
-        """, (idol["name"], idol["group_name"]))
-        keywords = cur.fetchall()
-    except sqlite3.OperationalError:
-        keywords = []
+    cur.execute("""
+        SELECT keyword, SUM(keyword_count) AS total_count
+        FROM keyword_trend
+        WHERE year = 2019
+          AND (
+              LOWER(keyword) LIKE '%' || LOWER(?) || '%'
+              OR LOWER(keyword) LIKE '%' || LOWER(?) || '%'
+          )
+        GROUP BY keyword
+        ORDER BY total_count DESC
+        LIMIT 5
+    """, (idol["name"], idol["group_name"]))
+    keywords = cur.fetchall()
 
     conn.close()
 
@@ -163,9 +165,6 @@ def idol_detail(id):
         popularity=popularity,
         keywords=keywords
     )
-
-
-
 
 
 # =========================
@@ -225,4 +224,8 @@ def add_comment(post_id):
 # 실행
 # =========================
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(
+        host="0.0.0.0",
+        port=5000,
+        debug=True
+    )

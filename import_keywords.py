@@ -48,4 +48,3 @@ with open("KC_KEYWORD_COMMUNITY_IDOL_VN_2019.csv", encoding="utf-8-sig") as f:
 conn.commit()
 conn.close()
 
-print("✅ 2019년 keyword_trend 데이터만 삽입 완료")
