@@ -1,89 +1,193 @@
+/* =========================
+   기본 설정
+========================= */
 body {
+    font-family: "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
     margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #f4f6f8;
-    color: #333;
+    padding: 0;
+    background: #f7f8fc;
+    color: #222;
 }
 
-/* 헤더 */
 header {
-    background-color: #2c3e50;
-    color: white;
-    padding: 30px;
     text-align: center;
+    padding: 30px 10px;
+    background: linear-gradient(135deg, #ffdde1, #ee9ca7);
+    color: #222;
 }
 
-/* 메인 영역 */
-main {
-    max-width: 900px;
-    margin: 40px auto;
-    padding: 0 20px;
+header h1 {
+    margin: 0;
+    font-size: 2.4rem;
 }
 
-/* 소개 섹션 */
-.intro {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
+header p {
+    margin-top: 8px;
+    font-size: 1.1rem;
+}
+
+/* =========================
+   월 선택 버튼 (중앙 + 크게)
+========================= */
+form {
+    text-align: center;
+    margin: 40px 0 30px;
+}
+
+select {
+    font-size: 1.4rem;
+    padding: 12px 26px;
+    border-radius: 30px;
+    border: none;
+    background: #fff;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+select:hover {
+    transform: scale(1.05);
+}
+
+/* =========================
+   베트남 관광객 정보
+========================= */
+main > p {
+    text-align: center;
+    font-size: 1.2rem;
     margin-bottom: 30px;
 }
 
-/* 아이돌 리스트 */
-.idol-list h2 {
+/* =========================
+   TOP 키워드 영역
+========================= */
+.keywords {
+    max-width: 900px;
+    margin: 0 auto 50px;
+    padding: 20px;
+}
+
+.keywords h2 {
+    text-align: center;
+    font-size: 1.8rem;
     margin-bottom: 20px;
 }
 
-.idol-card {
-    background-color: white;
-    padding: 15px;
-    border-radius: 8px;
-    margin-bottom: 15px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-/* 푸터 */
-footer {
-    background-color: #2c3e50;
-    color: whit
-}
-.stats table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-
-.stats th, .stats td {
-    border: 1px solid #ccc;
-    padding: 8px;
-    text-align: center;
-}
-
-.stats th {
-    background-color: #f0f0f0;
-}
-
-.group-section {
-    margin-bottom: 40px;
-}
-
-.group-header {
+.keywords ul {
     display: flex;
-    align-items: center;
-    gap: 20px;
+    flex-wrap: wrap;
+    gap: 14px;
+    justify-content: center;
+    padding: 0;
+    list-style: none;
 }
 
-.group-image {
-    width: 120px;
-    height: auto;
-    border-radius: 10px;
+.keywords li {
+    background: #ffffff;
+    padding: 12px 18px;
+    border-radius: 20px;
+    font-size: 1.1rem;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.12);
+    transition: transform 0.2s ease, background 0.2s ease;
 }
 
-.member-list {
-    margin-top: 10px;
-    padding-left: 20px;
+.keywords li:hover {
+    transform: translateY(-4px);
+    background: #ffe6ee;
 }
 
-.member-list li {
-    list-style: disc;
+/* =========================
+   TOP 5 아이돌 (유지)
+========================= */
+.idol-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 24px;
+    max-width: 1000px;
+    margin: 0 auto 40px;
 }
 
+.idol-card {
+    background: #fff;
+    border-radius: 18px;
+    padding: 15px;
+    text-align: center;
+    text-decoration: none;
+    color: inherit;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    transition: transform 0.2s ease;
+}
+
+.idol-card:hover {
+    transform: translateY(-6px);
+}
+
+.idol-card img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 14px;
+}
+
+.idol-card h3 {
+    margin: 10px 0 4px;
+}
+
+.idol-card p {
+    margin: 0;
+    color: #666;
+}
+
+/* =========================
+   1위 이유 설명 (귀엽게 + 크게)
+========================= */
+.explanation {
+    max-width: 900px;
+    margin: 30px auto 50px;
+    padding: 25px 30px;
+    background: #fff0f6;
+    border-radius: 20px;
+    text-align: center;
+    font-size: 1.5rem;
+    line-height: 1.6;
+    font-weight: 600;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+/* =========================
+   게시판
+========================= */
+hr {
+    margin: 40px 0;
+}
+
+textarea {
+    width: 90%;
+    max-width: 600px;
+    height: 80px;
+    border-radius: 12px;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+input {
+    width: 90%;
+    max-width: 600px;
+    border-radius: 12px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+button {
+    padding: 10px 24px;
+    border-radius: 20px;
+    border: none;
+    background: #ee9ca7;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+button:hover {
+    opacity: 0.9;
+}
