@@ -84,20 +84,7 @@ def home():
     """)
     idols = cur.fetchall()
 
-    # -------------------------
-    # 5. 게시글 목록 (최대 10개)
-    # -------------------------
-    posts = []
-    try:
-        cur.execute("""
-            SELECT *
-            FROM post
-            ORDER BY id DESC
-            LIMIT 10
-        """)
-        posts = cur.fetchall()
-    except sqlite3.OperationalError:
-        posts = []
+    
 
     conn.close()
 
@@ -107,8 +94,7 @@ def home():
         visitor=visitor,
         top_keywords=top_keywords,
         top5_idols=top5_idols,   # ⭐ 반드시 전달
-        idols=idols,
-        posts=posts
+        idols=idols
     )
 
 
@@ -167,57 +153,7 @@ def idol_detail(id):
     )
 
 
-# =========================
-# 게시글 작성
-# =========================
-@app.route("/post", methods=["POST"])
-def add_post():
-    title = request.form.get("title")
-    content = request.form.get("content")
 
-    if not title or not content:
-        return redirect(url_for("home"))
-
-    conn = get_db()
-    cur = conn.cursor()
-
-    try:
-        cur.execute("""
-            INSERT INTO post (title, content, created_at)
-            VALUES (?, ?, ?)
-        """, (title, content, datetime.now()))
-        conn.commit()
-    except sqlite3.OperationalError:
-        pass
-
-    conn.close()
-    return redirect(url_for("home"))
-
-
-# =========================
-# 댓글 작성
-# =========================
-@app.route("/comment/<int:post_id>", methods=["POST"])
-def add_comment(post_id):
-    content = request.form.get("content")
-
-    if not content:
-        return redirect(url_for("home"))
-
-    conn = get_db()
-    cur = conn.cursor()
-
-    try:
-        cur.execute("""
-            INSERT INTO comment (post_id, content, created_at)
-            VALUES (?, ?, ?)
-        """, (post_id, content, datetime.now()))
-        conn.commit()
-    except sqlite3.OperationalError:
-        pass
-
-    conn.close()
-    return redirect(url_for("home"))
 
 
 # =========================
