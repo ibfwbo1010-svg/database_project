@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>{{ idol.name }}</title>
+    <title>{{ idol.name }} - Idol Detail</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
@@ -14,25 +14,63 @@
 
 <main>
 
-<img src="{{ url_for('static',
-    filename='images/' ~ (idol.image if idol.image else 'default.jpg')) }}"
-     width="200">
+    <!-- 기본 정보 -->
+    <section class="idol-basic">
+        <img
+            src="{{ url_for('static', filename='images/' ~ idol.image) }}"
+            alt="{{ idol.name }}"
+            class="idol-detail-img"
+        >
 
-<h2>📈 2019년 월별 인기도</h2>
-<ul>
-{% for p in popularity %}
-<li>{{ p.month }}월 : {{ p.popularity_score }}</li>
-{% endfor %}
-</ul>
+        <ul class="idol-info">
+            <li><strong>이름:</strong> {{ idol.name }}</li>
+            <li><strong>그룹:</strong> {{ idol.group_name }}</li>
+        </ul>
+    </section>
 
-<h2>📊 베트남 커뮤니티 주요 키워드</h2>
-<ul>
-{% for k in keywords %}
-<li>#{{ k.keyword }} ({{ k.total_count }})</li>
-{% endfor %}
-</ul>
+    <!-- 월별 인기도 -->
+    <section class="idol-popularity">
+        <h2>📊 2019년 월별 인기도</h2>
 
-<a href="/">← 메인으로 돌아가기</a>
+        {% if popularity %}
+        <table>
+            <tr>
+                <th>월</th>
+                <th>인기도 점수</th>
+            </tr>
+            {% for row in popularity %}
+            <tr>
+                <td>{{ row.month }}월</td>
+                <td>{{ row.popularity_score }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+            <p>월별 인기도 데이터가 없습니다.</p>
+        {% endif %}
+    </section>
+
+    <!-- 베트남 커뮤니티 주요 키워드 -->
+    <section class="idol-keywords">
+        <h2>🔥 베트남 커뮤니티 주요 키워드</h2>
+
+        {% if keywords %}
+        <ul class="keyword-list">
+            {% for k in keywords %}
+                <li>
+                    <strong>{{ k.keyword }}</strong>
+                    ({{ k.total_count }}회)
+                </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+            <p>관련 키워드 데이터가 없습니다.</p>
+        {% endif %}
+    </section>
+
+    <div style="margin-top: 30px;">
+        <a href="/">← 메인 페이지로 돌아가기</a>
+    </div>
 
 </main>
 
