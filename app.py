@@ -103,6 +103,7 @@ def home():
 # =========================
 @app.route("/idol/<int:id>")
 def idol_detail(id):
+    print("DEBUG idol_id:", id)
     conn = get_db()
     cur = conn.cursor()
 
@@ -123,7 +124,7 @@ def idol_detail(id):
         cur.execute("""
             SELECT
                 month,
-                score AS popularity_score
+                popularity_score
             FROM idol_popularity
             WHERE idol_id = ?
               AND year = 2019
@@ -162,6 +163,9 @@ def idol_detail(id):
         popularity=popularity,
         keywords=keywords
     )
+
+
+
 
 
 # =========================

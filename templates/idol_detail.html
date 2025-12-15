@@ -4,75 +4,132 @@
     <meta charset="UTF-8">
     <title>{{ idol.name }} - Idol Detail</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        .detail-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .idol-header {
+            display: flex;
+            gap: 40px;
+            align-items: flex-start;
+        }
+
+        .idol-header img {
+            width: 280px; /* 🔥 사진 크기 키움 */
+            border-radius: 12px;
+        }
+
+        .idol-info {
+            flex: 1;
+        }
+
+        .idol-info h1 {
+            margin-bottom: 10px;
+        }
+
+        .meta {
+            margin-top: 10px;
+            font-size: 15px;
+            color: #555;
+        }
+
+        table {
+            margin-top: 15px;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        table th {
+            background-color: #f5f5f5;
+        }
+
+        section {
+            margin-top: 40px;
+        }
+    </style>
 </head>
 <body>
 
-<header>
-    <h1>{{ idol.name }}</h1>
-    <p>{{ idol.group_name }}</p>
-</header>
+<div class="detail-container">
 
-<main>
-
-    <!-- 기본 정보 -->
-    <section class="idol-basic">
+    <!-- 🔹 상단: 이미지 + 기본 정보 -->
+    <div class="idol-header">
         <img
             src="{{ url_for('static', filename='images/' ~ idol.image) }}"
             alt="{{ idol.name }}"
-            class="idol-detail-img"
         >
 
-        <ul class="idol-info">
-            <li><strong>이름:</strong> {{ idol.name }}</li>
-            <li><strong>그룹:</strong> {{ idol.group_name }}</li>
-        </ul>
-    </section>
+        <div class="idol-info">
+            <h1>{{ idol.name }}</h1>
+            <h3>{{ idol.group_name }}</h3>
 
-    <!-- 월별 인기도 -->
-    <section class="idol-popularity">
+            <div class="meta">
+                <p>🏢 소속사:
+                    {{ idol.agency if idol.agency else "정보 없음" }}
+                </p>
+                <p>🎤 데뷔년도:
+                    {{ idol.debut_year if idol.debut_year else "정보 없음" }}
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🔹 월별 인기도 -->
+    <section>
         <h2>📊 2019년 월별 인기도</h2>
 
-        {% if popularity %}
+        {% if popularity and popularity|length > 0 %}
         <table>
-            <tr>
-                <th>월</th>
-                <th>인기도 점수</th>
-            </tr>
-            {% for row in popularity %}
-            <tr>
-                <td>{{ row.month }}월</td>
-                <td>{{ row.popularity_score }}</td>
-            </tr>
-            {% endfor %}
+            <thead>
+                <tr>
+                    <th>월</th>
+                    <th>인기도 점수</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in popularity %}
+                <tr>
+                    <td>{{ row.month }}월</td>
+                    <td>{{ row.popularity_score }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
         </table>
         {% else %}
             <p>월별 인기도 데이터가 없습니다.</p>
         {% endif %}
     </section>
 
-    <!-- 베트남 커뮤니티 주요 키워드 -->
-    <section class="idol-keywords">
+    <!-- 🔹 베트남 커뮤니티 주요 키워드 -->
+    <section>
         <h2>🔥 베트남 커뮤니티 주요 키워드</h2>
 
-        {% if keywords %}
-        <ul class="keyword-list">
-            {% for k in keywords %}
-                <li>
-                    <strong>{{ k.keyword }}</strong>
-                    ({{ k.total_count }}회)
-                </li>
-            {% endfor %}
-        </ul>
+        {% if keywords and keywords|length > 0 %}
+            <ul>
+                {% for k in keywords %}
+                <li>{{ k.keyword }} ({{ k.total_count }})</li>
+                {% endfor %}
+            </ul>
         {% else %}
             <p>관련 키워드 데이터가 없습니다.</p>
         {% endif %}
     </section>
 
-    <div style="margin-top: 30px;">
+    <footer style="margin-top:50px;">
         <a href="/">← 메인 페이지로 돌아가기</a>
-    </div>
+    </footer>
 
-</main>
+</div>
 
 </body>
 </html>
