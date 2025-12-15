@@ -61,3 +61,29 @@ footer {
 .stats th {
     background-color: #f0f0f0;
 }
+
+.group-section {
+    margin-bottom: 40px;
+}
+
+.group-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.group-image {
+    width: 120px;
+    height: auto;
+    border-radius: 10px;
+}
+
+.member-list {
+    margin-top: 10px;
+    padding-left: 20px;
+}
+
+.member-list li {
+    list-style: disc;
+}
+

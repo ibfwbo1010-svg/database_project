@@ -9,47 +9,47 @@
 
 <header>
     <h1>Vietnam K-POP Idol Trend</h1>
-    <p>Data-driven Hallyu Popularity & Community Service</p>
+    <p>Monthly Top 5 K-POP Idols in Vietnam</p>
 </header>
 
 <main>
 
-    <!-- 검색 -->
+    <!-- 월 선택 -->
     <section class="search">
         <form method="get" action="/">
-            <input
-                type="text"
-                name="keyword"
-                placeholder="Search idol or group"
-                value="{{ keyword | default('') }}"
-            >
-            <button type="submit">Search</button>
+            <label for="month">Select Month:</label>
+            <select name="month" id="month" onchange="this.form.submit()">
+                {% for m in range(1, 13) %}
+                <option value="{{ m }}"
+                    {% if selected_month == m|string %}selected{% endif %}>
+                    {{ m }}월
+                </option>
+                {% endfor %}
+            </select>
         </form>
     </section>
 
-    <!-- 아이돌 이미지 카드 -->
-    <section class="idol-list">
-        <h2>Top K-POP Idols in Vietnam</h2>
+    <!-- TOP 5 아이돌 -->
+    <section class="top5">
+        <h2>🔥 TOP 5 Idols ({{ selected_month }}월)</h2>
 
         <div class="idol-grid">
-            {% for idol in idols %}
-            <a href="/idol/{{ idol.id }}" class="idol-card">
+            {% for idol in top_idols %}
+            <a href="/idol/{{ idol.id }}" class="idol-card top">
                 <img
-                    src="{{ url_for('static', filename='images/' ~ idol.image) }}"
-                    alt="{{ idol.name }}"
+                  src="{{ url_for(
+                    'static',
+                    filename='images/' ~ (idol.image if idol.image else 'default.jpg')
+                  ) }}"
+                  alt="{{ idol.name }}"
                 >
                 <h3>{{ idol.name }}</h3>
                 <p>{{ idol.group_name }}</p>
-
-                {% if idol.popularity_score %}
-                <p class="score">Popularity: {{ idol.popularity_score }}</p>
-                {% endif %}
+                <strong>Popularity: {{ idol.popularity_score }}</strong>
             </a>
             {% endfor %}
         </div>
     </section>
-
-   
 
 </main>
 
